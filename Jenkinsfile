@@ -7,4 +7,9 @@ pipeline {
             }
         }
     }
+    post {
+      always {
+        jest 'dist/index.html'
+      }
+    }
 }
