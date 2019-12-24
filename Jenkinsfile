@@ -14,7 +14,7 @@ pipeline {
                   allowMissing: false,
                   alwaysLinkToLastBuild: false,
                   keepAll: true,
-                  reportDir: 'build',
+                  reportDir: 'dist',
                   reportFiles: 'index.html',
                   reportName: 'Converage Report'
                 ]
