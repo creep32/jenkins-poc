@@ -8,7 +8,7 @@ pipeline {
         }
         stage('unit test') {
             steps {
-                sh 'run test'
+                sh 'echo test'
 
                 publishHTML target: [
                   allowMissing: false,
