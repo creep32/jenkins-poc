@@ -6,10 +6,19 @@ pipeline {
                 sh 'npm --version'
             }
         }
-    }
-    post {
-      always {
-        jest 'dist/index.html'
-      }
+        stage('unit test') {
+            steps {
+                sh 'run test'
+
+                publishHTML target: [
+                  allowMissing: false,
+                  alwaysLinkToLastBuild: false,
+                  keepAll: true,
+                  reportDir: 'build',
+                  reportFiles: 'index.html',
+                  reportName: 'Converage Report'
+                ]
+            }
+        }
     }
 }
