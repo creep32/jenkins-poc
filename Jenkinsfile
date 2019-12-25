@@ -25,6 +25,7 @@ pipeline {
             steps {
                 dir('./rest-api/docker-compose/') {
                   sh 'rm -rf artifact/*'
+                  su 'chmod -R 777 esdata1/'
                   sh 'docker-compose -f docker-compose.yml -f docker-compose-local.yml run wait_es'
                   sh 'docker-compose -f docker-compose.yml -f docker-compose-local.yml build restapi'
                   sh 'docker-compose -f docker-compose.yml -f docker-compose-local.yml run wait_restapi'
