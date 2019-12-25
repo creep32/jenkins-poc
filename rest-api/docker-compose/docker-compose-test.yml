@@ -1,0 +1,24 @@
+version: '3.5'
+services:
+  unit:
+    build:
+      context: ${PWD}/../
+      dockerfile: Dockerfile.test
+      target: unit
+    container_name: unitest
+    networks:
+      - esnet
+    volumes:
+      - ${PWD}/artifact/coverage:/opt/app/coverage
+  integrate:
+    build:
+      context: ${PWD}/../
+      dockerfile: Dockerfile.test
+      target: integration
+    container_name: integratest
+    networks:
+      - esnet
+    environment:
+      - "REST_API_URL=http://restapi:3000"
+    volumes:
+      - ${PWD}/artifact/coverage:/opt/app/coverage

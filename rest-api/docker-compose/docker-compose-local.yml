@@ -1,0 +1,30 @@
+version: '3.5'
+services:
+  restapi:
+    build:
+      context: ${PWD}/../
+      dockerfile: Dockerfile.app
+    container_name: restapi
+    ports:
+      - 3000:3000
+    networks:
+      - esnet
+    environment:
+      - "ES_URL=http://elasticsearch:9200"
+
+  wait_restapi:
+    image: busybox
+    container_name: ready_ness_probe_restapi
+    command: >
+      /bin/sh -c "
+        while [ `wget -S  http://restapi:3000 2>&1 | grep -E '^ *HTTP.*200 OK' | wc -l` -eq 0 ]
+        do
+          echo 'sleeping';
+          sleep 3;
+        done ;
+
+        echo 'rest api ready!'"
+    networks:
+      - esnet
+    depends_on:
+      - restapi

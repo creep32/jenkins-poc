@@ -1,7 +1,7 @@
 pipeline {
-    agent { docker { image 'node:6.3' } }
+    agent { docker { image 'kuritam/jenkins-operation' } }
     stages {
-        stage('build') {
+        stage('unit-test') {
             steps {
                 sh 'npm --version'
             }

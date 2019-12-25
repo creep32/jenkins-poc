@@ -1,0 +1,38 @@
+version: '3.5'
+services:
+  wait_es:
+    image: busybox
+    container_name: ready_ness_probe
+    command: >
+      /bin/sh -c "
+        while [ `(wget -T 120 -O /dev/stdout http://elasticsearch:9200/_cat/health || echo 'a b c d') | awk '{print $$4}'` != 'green' ] ;
+        do
+          echo 'sleeping';
+          sleep 3;
+        done ;
+
+        echo 'elastic search ready!'"
+    depends_on:
+      - elasticsearch
+    networks:
+      - esnet
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.5.0
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+    #  - cluster.name=docker-cluster
+    #  - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms1024m -Xmx1024m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ${PWD}/esdata1:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+    networks:
+      - esnet
+networks:
+  esnet:
