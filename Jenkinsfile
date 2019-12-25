@@ -7,14 +7,17 @@ pipeline {
                 dir('./rest-api/docker-compose/') {
                   sh 'docker-compose -f docker-compose-unit.yml build'
                   sh 'docker-compose -f docker-compose-unit.yml run unit'
+
                   publishHTML target: [
                     allowMissing: false,
                     alwaysLinkToLastBuild: false,
                     keepAll: true,
                     reportDir: 'artifact/coverage/',
                     reportFiles: '*',
-                    reportName: 'Converage Report'
+                    reportName: 'Unit test Converage Report'
                   ]
+
+                  archive (includes: 'artifact/coverage/*')
                 }
             }
         }
