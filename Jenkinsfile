@@ -1,5 +1,6 @@
 pipeline {
-    agent { docker { image 'kuritam/jenkins-operation' } }
+   // agent { docker { image 'kuritam/jenkins-operation' } }
+    agent any
     stages {
         stage('unit-test') {
             steps {
