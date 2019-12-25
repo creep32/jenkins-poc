@@ -17,19 +17,19 @@ pipeline {
                 }
             }
         }
-#        stage('unit test') {
-#            steps {
-#                sh 'echo test'
-#
-#                publishHTML target: [
-#                  allowMissing: false,
-#                  alwaysLinkToLastBuild: false,
-#                  keepAll: true,
-#                  reportDir: 'dist',
-#                  reportFiles: 'index.html',
-#                  reportName: 'Converage Report'
-#                ]
-#            }
-#        }
+       stage('unit test') {
+            steps {
+                sh 'echo test'
+
+                publishHTML target: [
+                  allowMissing: false,
+                  alwaysLinkToLastBuild: false,
+                  keepAll: true,
+                  reportDir: 'dist',
+                  reportFiles: 'index.html',
+                  reportName: 'Converage Report'
+                ]
+            }
+        }
     }
 }
