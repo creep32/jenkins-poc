@@ -29,8 +29,8 @@ pipeline {
                   sh 'docker-compose -f docker-compose.yml -f docker-compose-local.yml run wait_es'
                   sh 'docker-compose -f docker-compose.yml -f docker-compose-local.yml build restapi'
                   sh 'docker-compose -f docker-compose.yml -f docker-compose-local.yml run wait_restapi'
-                  sh 'docker-compose -f docker-compose-test.yml build'
-                  sh 'docker-compose -f docker-compose-test.yml run integrate'
+                  sh 'docker-compose -f docker-compose.yml -f docker-compose-local.yml -f docker-compose-test.yml build'
+                  sh 'docker-compose -f docker-compose.yml -f docker-compose-local.yml -f docker-compose-test.yml run integrate'
 
                   publishHTML target: [
                     allowMissing: false,
