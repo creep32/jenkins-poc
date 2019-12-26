@@ -11,13 +11,13 @@ pipeline {
                     allowMissing: false,
                     alwaysLinkToLastBuild: false,
                     keepAll: true,
-                    reportDir: 'artifact/unit/coverage/lcov-report/',
+                    reportDir: 'artifact/unit/lcov-report/',
                     reportFiles: '*',
                     reportName: 'Unit test Converage Report'
                   ]
                   sh 'bash run.sh -p unit unit-ci down'
 
-                  archive (includes: 'artifact/unit/coverage/**')
+                  archive (includes: 'artifact/unit/**')
                 }
             }
         }
@@ -30,13 +30,13 @@ pipeline {
                      allowMissing: false,
                      alwaysLinkToLastBuild: false,
                      keepAll: true,
-                     reportDir: 'artifact/integrate/coverage/lcov-report/',
+                     reportDir: 'artifact/integrate/lcov-report/',
                      reportFiles: '*',
                      reportName: 'Unit test Converage Report'
                    ]
                    sh 'bash run.sh -p integrate integrate-ci down'
 
-                   archive (includes: 'artifact/integrate/coverage/**')
+                   archive (includes: 'artifact/integrate/**')
              }
          }
       }
