@@ -1,0 +1,16 @@
+version: '3.7'
+services:
+  test:
+    build:
+      context: ${PWD}/../
+      dockerfile: Dockerfile.test
+      target: integration
+    container_name: ${COMPOSE_PROJECT_NAME}-integration
+    environment:
+      - REST_API_URL="http://restapi:3000"
+    volumes:
+      - testreport:/opt/app/coverage
+    networks:
+      - base-net
+volumes:
+  testreport:

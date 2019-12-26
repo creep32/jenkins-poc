@@ -1,0 +1,29 @@
+version: '3.7'
+services:
+  restapi:
+    image: ${RESTAPI_IMAGE}
+    networks:
+      - base-net
+    environment:
+      - "ES_URL=http://elasticsearch:9200"
+
+  wait_for_restapi:
+    image: busybox
+    container_name: ready_ness_probe_restapi
+    command: >
+      /bin/sh -c "
+        RETRY=12
+        while [ $$RETRY -ne 0 -a `wget -S  http://restapi:3000 2>&1 | grep -E '^ *HTTP.*200 OK' | wc -l` -eq 0 ]
+        do
+          echo 'sleeping';
+          sleep 5;
+          RETRY=`expr $$RETRY - 1`
+        done ;
+
+        [ $$RETRY -eq 0 ] && echo 'readyness probe for ES failed.'  &&  exit 1
+
+        echo 'rest api ready!'"
+    networks:
+      - base-net
+    depends_on:
+      - restapi

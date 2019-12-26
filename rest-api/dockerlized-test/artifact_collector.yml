@@ -1,0 +1,15 @@
+version: '3.7'
+services:
+  collect:
+    image: busybox
+    container_name: ${COMPOSE_PROJECT_NAME}-collector
+    command: >
+      /bin/sh -c "
+      rm -rf /var/asserts/$COMPOSE_PROJECT_NAME ;
+      mkdir /var/asserts/$COMPOSE_PROJECT_NAME ;
+      cp -fpr /var/testreport/* /var/asserts/$COMPOSE_PROJECT_NAME ;
+      chown -R $USER_ID:$GROUP_ID /var/asserts/$COMPOSE_PROJECT_NAME
+      "
+    volumes:
+      - testreport:/var/testreport
+      - ${PWD}/artifact:/var/asserts

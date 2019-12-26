@@ -1,0 +1,45 @@
+version: '3.7'
+services:
+  wait_for_es:
+    image: busybox
+    container_name: ${COMPOSE_PROJECT_NAME}-readyness_probe
+    command: >
+      /bin/sh -c "
+        RETRY=12
+        while [ $$RETRY -ne 0 -a `(wget -T 120 -O /dev/stdout http://elasticsearch:9200/_cat/health || echo 'a b c d') | awk '{print $$4}'` != 'green' ] ;
+        do
+          echo 'sleeping';
+          sleep 10;
+          RETRY=`expr $$RETRY - 1`
+        done ;
+        [ $$RETRY -eq 0 ] && echo 'readyness probe for ES failed.'  &&  exit 1
+
+        echo 'elastic search ready!'"
+    depends_on:
+      - elasticsearch
+    networks:
+      - base-net
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.5.0
+    container_name: ${COMPOSE_PROJECT_NAME}-elasticsearch
+    environment:
+      - discovery.type=single-node
+    #  - cluster.name=docker-cluster
+    #  - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms1024m -Xmx1024m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    # for ports-corision
+    #ports:
+    #  - 9200:9200
+    networks:
+      - base-net
+networks:
+  base-net:
+
+volumes:
+  esdata:

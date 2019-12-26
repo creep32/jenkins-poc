@@ -1,0 +1,8 @@
+version: '3.7'
+services:
+  elasticsearch:
+    volumes:
+      - ${PWD}/esdata1:/usr/share/elasticsearch/data
+    # for ports-corision
+    ports:
+      - 9200:9200

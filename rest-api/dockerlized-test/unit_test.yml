@@ -1,0 +1,12 @@
+version: '3.7'
+services:
+  test:
+    build:
+      context: ${PWD}/../
+      dockerfile: Dockerfile.test
+      target: unit
+    container_name: ${COMPOSE_PROJECT_NAME}-unitest
+    volumes:
+      - testreport:/opt/app/coverage
+volumes:
+  testreport:
