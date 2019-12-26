@@ -7,7 +7,7 @@ services:
       target: integration
     container_name: ${COMPOSE_PROJECT_NAME}-integration
     environment:
-      - REST_API_URL="http://restapi:3000"
+      - "REST_API_URL=http://restapi:3000"
     volumes:
       - testreport:/opt/app/coverage
     networks:
