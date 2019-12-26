@@ -4,47 +4,41 @@ pipeline {
     stages {
         stage('unit-test') {
             steps {
-                dir('./rest-api/docker-compose/') {
-                  sh 'docker-compose -f docker-compose-unit.yml build'
-                  sh 'docker-compose -f docker-compose-unit.yml run unit'
+                dir('./rest-api/dockerlized-test/') {
+                  sh 'bash run.sh -p unit unit-ci run'
 
                   publishHTML target: [
                     allowMissing: false,
                     alwaysLinkToLastBuild: false,
                     keepAll: true,
-                    reportDir: 'artifact/coverage/lcov-report/',
+                    reportDir: 'artifact/unit/coverage/lcov-report/',
                     reportFiles: '*',
                     reportName: 'Unit test Converage Report'
                   ]
+                  sh 'bash run.sh -p unit unit-ci down'
 
-                  archive (includes: 'artifact/coverage/**')
+                  archive (includes: 'artifact/unit/coverage/**')
                 }
             }
         }
-       stage('integrate test') {
-            steps {
-                dir('./rest-api/docker-compose/') {
-                  sh 'rm -rf artifact/*'
-                  sh 'chmod -R 777 esdata1/'
-                  sh 'docker-compose -f docker-compose.yml -f docker-compose-local.yml run wait_es'
-                  sh 'docker-compose -f docker-compose.yml -f docker-compose-local.yml build restapi'
-                  sh 'docker-compose -f docker-compose.yml -f docker-compose-local.yml run wait_restapi'
-                  sh 'docker-compose -f docker-compose.yml -f docker-compose-local.yml -f docker-compose-test.yml build'
-                  sh 'docker-compose -f docker-compose.yml -f docker-compose-local.yml -f docker-compose-test.yml run integrate'
+        stage('integrate test') {
+             steps {
+                 dir('./rest-api/dockerlized-test/') {
+                   sh 'bash run.sh -p integrate integrate-ci run'
 
-                  publishHTML target: [
-                    allowMissing: false,
-                    alwaysLinkToLastBuild: false,
-                    keepAll: true,
-                    reportDir: 'artifact/coverage/lcov-report/',
-                    reportFiles: '*',
-                    reportName: 'inegrate test Converage Report'
-                  ]
+                   publishHTML target: [
+                     allowMissing: false,
+                     alwaysLinkToLastBuild: false,
+                     keepAll: true,
+                     reportDir: 'artifact/integrate/coverage/lcov-report/',
+                     reportFiles: '*',
+                     reportName: 'Unit test Converage Report'
+                   ]
+                   sh 'bash run.sh -p integrate integrate-ci down'
 
-                  archive (includes: 'artifact/coverage/**')
-                }
-
-            }
-        }
-    }
+                   archive (includes: 'artifact/integrate/coverage/**')
+             }
+         }
+      }
+   }
 }
