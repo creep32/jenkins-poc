@@ -10,6 +10,6 @@
 //}
 
 // Jenkinsfile
-@Library('my-shared-library') _
+@Library('my-shared-library@v1.0.0') _
 
 evenOrOdd(currentBuild.getNumber())
