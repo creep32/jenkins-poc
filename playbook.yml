@@ -1,0 +1,10 @@
+- name: Put ssh key on local ssh
+  hosts: all
+  become: yes
+  tasks:
+    - name: Put db_password.txt
+      template:
+        src: "template/db_pass.txt.j2"
+        dest: "/etc/db_pass.txt"
+        mode: 0600
+#      no_log: true
